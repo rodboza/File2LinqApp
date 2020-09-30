@@ -1,0 +1,11 @@
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.exe
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.deps.json
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.runtimeconfig.json
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.runtimeconfig.dev.json
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.dll
+C:\rodboza\projetos\File2Linq\bin\Debug\netcoreapp3.0\File2LinqApp.pdb
+C:\rodboza\projetos\File2Linq\obj\Debug\netcoreapp3.0\File2LinqApp.csprojAssemblyReference.cache
+C:\rodboza\projetos\File2Linq\obj\Debug\netcoreapp3.0\File2LinqApp.AssemblyInfoInputs.cache
+C:\rodboza\projetos\File2Linq\obj\Debug\netcoreapp3.0\File2LinqApp.AssemblyInfo.cs
+C:\rodboza\projetos\File2Linq\obj\Debug\netcoreapp3.0\File2LinqApp.dll
+C:\rodboza\projetos\File2Linq\obj\Debug\netcoreapp3.0\File2LinqApp.pdb
