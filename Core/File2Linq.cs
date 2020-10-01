@@ -14,15 +14,16 @@ namespace File2LinqApp.Core
     public class File2Linq  
     {  
         AssemblyName asemblyName;  
+        public string className;
         Type type;
         public string[] columnNames;
         Type[] types;
         public LinhaBase[] rows;
 
-        public File2Linq( string ClassName, string nomeArquivo )
+        public File2Linq( string className, string nomeArquivo )
         {
-            this.asemblyName = new AssemblyName(ClassName);
-
+            this.className = className;
+            this.asemblyName = new AssemblyName(className);
             string[] allLines = File.ReadAllLines(nomeArquivo);
             this.columnNames = allLines.FirstOrDefault().Split(";");
             this.types = columnNames.Select( header => typeof(string)).ToArray<Type>();

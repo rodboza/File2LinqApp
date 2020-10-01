@@ -37,6 +37,7 @@ namespace File2LinqApp.Context
 
             var arqPrinc = new Arquivo { Id = 1, Nome = "ArquivoPrincipal", Caminho = @".\files\Equities_TradeInformationFile_20180625_1.txt"};
             var arqDomin = new Arquivo { Id = 2, Nome = "ArquivoDominio", Caminho = @".\files\Equities_Rodboza.txt"} ;
+            var arqDomin2 = new Arquivo { Id = 3, Nome = "ArquivoDominio2", Caminho = @".\files\Equities_Rodboza.txt"} ;
             Arquivos.Add( arqPrinc );
             Arquivos.Add( arqDomin );
             
@@ -44,11 +45,13 @@ namespace File2LinqApp.Context
             Processamentos.Add (proc);
 
             Dominios.Add (new Dominio {Id = 1, Processamento = proc, ArquivoDominio = arqDomin, ColunaFKPrincipal = "TckrSymb", ColunaPkDominio = "TckrSymb" });
+            Dominios.Add (new Dominio {Id = 2, Processamento = proc, ArquivoDominio = arqDomin2, ColunaFKPrincipal = "TckrSymb", ColunaPkDominio = "TckrSymb" });
 
             Saidas.Add( new Saida {Id = Saidas.Count, Processamento = proc, ArquivoOrigem = arqPrinc, ColunaOrigem = "TckrSymb", ColunaSaida = "Ativo"});
             Saidas.Add( new Saida {Id = Saidas.Count, Processamento = proc, ArquivoOrigem = arqPrinc, ColunaOrigem = "RptDt", ColunaSaida = "Data"});
             Saidas.Add( new Saida {Id = Saidas.Count, Processamento = proc, ArquivoOrigem = arqPrinc, ColunaOrigem = "ISIN", ColunaSaida = "Codigo"});
             Saidas.Add( new Saida {Id = Saidas.Count, Processamento = proc, ArquivoOrigem = arqDomin, ColunaOrigem = "NovaColunaRodboza", ColunaSaida = "ColunaDominio"});
+            Saidas.Add( new Saida {Id = Saidas.Count, Processamento = proc, ArquivoOrigem = arqDomin2, ColunaOrigem = "NovaColunaRodboza", ColunaSaida = "ColunaDominio"});
 
         }
     }

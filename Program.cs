@@ -2,6 +2,7 @@
 using System.Linq;
 using File2LinqApp.Context;
 using File2LinqApp.Core;
+using System.Collections.Generic;
 
 namespace File2LinqApp
 {
@@ -14,35 +15,47 @@ namespace File2LinqApp
             ContextDB db = new ContextDB(true);
 
             
-            foreach (var process in db.Processamentos)
+            foreach (var processamento in db.Processamentos)
             {
-                File2Linq arquivoPrincipal = new File2Linq(process.ArquivoPrincipal);
-                var dominio = db.Dominios.Find( d => d.Processamento.id == process.id);
-                File2Linq arquivoDominio = new File2Linq(dominio.ArquivoDominio);
+                File2Linq arquivoPrincipal = new File2Linq(processamento.ArquivoPrincipal);
+                File2Linq [] arquivosDominio = db.Dominios
+                                                .Where( d => d.Processamento.id == processamento.id )
+                                                .Select( d => new File2Linq(d.ArquivoDominio))
+                                                .ToArray<File2Linq>();
                 
-                var join = arquivoPrincipal.rows
-                .Join(
-                    arquivoDominio.rows, 
-                    p => p.ConsultaValor(dominio.ColunaFKPrincipal), 
-                    d => d.ConsultaValor(dominio.ColunaPkDominio),
-                    (p,d) => new { Principal = p, Dominio = d}
-                );
-
-                foreach (var s in join.Take(10))
+                foreach (var linhaPrincipal  in arquivoPrincipal.rows.Take(500))
                 {
-                    string jsonSaida = "{";
-                    string separador = "";
+                    List<ArquivoLinhas> arquivoLinhas = new List<ArquivoLinhas>();
+                    arquivoLinhas.Add(new ArquivoLinhas { NomeArquivo = processamento.ArquivoPrincipal.Nome, Linha = linhaPrincipal} );
 
-                    foreach (var sd in db.Saidas.Where( s => s.Processamento.id == process.id))
-                    {
-                        jsonSaida += separador + sd.ColunaSaida + ":" + s.Dominio.ConsultaValor(sd.ColunaOrigem);
-                        separador = ";";
-                    }
+                    var arquivoLinhasDominio = db.Dominios
+                        .Where( s => s.Processamento.id == processamento.id)
+                        .Select( dominio => new ArquivoLinhas { 
+                                
+                                NomeArquivo = dominio.ArquivoDominio.Nome, 
+                                Linha = arquivosDominio
+                                        .Single( a => a.className == dominio.ArquivoDominio.Nome)
+                                        .rows
+                                        .Single(d => d.ConsultaValor(dominio.ColunaPkDominio) == linhaPrincipal.ConsultaValor(dominio.ColunaFKPrincipal))
+                                }
+                        ).ToArray<ArquivoLinhas>();
+                    arquivoLinhas.AddRange(arquivoLinhasDominio);
 
-                    jsonSaida += "}";
-                                            
-                    Console.WriteLine ( jsonSaida);
+                    
+                    var camposSaida = db.Saidas
+                        .Where( s => s.Processamento.id == processamento.id)
+                        .Select( saida => {
+                            string jsonSaida = 
+                                saida.ColunaSaida + ":" + 
+                                arquivoLinhas.Single( s => s.NomeArquivo == saida.ArquivoOrigem.Nome).Linha.ConsultaValor(saida.ColunaOrigem);
+                            return jsonSaida;
+                        } );
+                    camposSaida.Prepend("{");
+                    camposSaida.Append("}");
+
+                    Console.WriteLine ( string.Join(';', camposSaida ));
                 }
+
 
             }
 
